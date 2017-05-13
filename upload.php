@@ -1,0 +1,23 @@
+<?php
+$ds          = DIRECTORY_SEPARATOR;  //1
+ 
+$storeFolder = 'uploads';   //2
+ 
+if (!empty($_FILES)) {
+    print_r($_FILES);
+    $tempFile = $_FILES['file']['tmp_name'];          //3             
+      
+    $targetPath = dirname( __FILE__ ) . $ds. $storeFolder . $ds;  //4
+     
+    $targetFile =  $targetPath. $_FILES['file']['name'];  //5
+ 
+    move_uploaded_file($tempFile,$targetFile); //6
+    
+    $resize = new Imagick($targetFile);
+
+    $resize->resizeImage(1024,1024,Imagick::FILTER_LANCZOS,1);
+    
+    $resize->writeImage($targetFile . '-resize.jpg');
+    $resize->destroy();
+}
+?>  
